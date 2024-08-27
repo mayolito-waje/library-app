@@ -37,6 +37,7 @@ body {
   justify-content: center;
   box-shadow: gray 2px 2px 5px;
   padding: 2em;
+  margin-bottom: 2em;
   gap: 0.8em;
 
   & h2, & p {
@@ -47,6 +48,56 @@ body {
   & h2 {
     font-size: clamp(1rem, 1vw + 2rem, 3rem);
   }
+}
+
+.add-book-btn-container {
+  width: 100%;
+  display: grid;
+  place-content: center;
+}
+
+button.add-book {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: clamp(1.2rem, 1vw + 0.8rem, 2rem);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+button.add-book::before {
+  content: '';
+  display: inline-block;
+  height: clamp(1.2rem, 1vw + 0.8rem, 2rem);
+  width: clamp(1.2rem, 1vw + 0.8rem, 2rem);
+  background: url(icons/plus.svg) no-repeat center;
+  background-size: contain;
+  position: relative;
+  bottom: 2px;
+}
+
+button.add-book:hover::before {
+  background: url(icons/plus-box.svg) no-repeat center;
+}
+
+button.add-book::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  background-color: black;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+button.add-book:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 
 @media (min-width: 720px) {
