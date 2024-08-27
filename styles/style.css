@@ -1,1 +1,58 @@
 @import url(normalize.css);
+
+@font-face {
+  font-family: 'chunkfive_printregular';
+  src: url('fonts/chunk_five_print-webfont.woff2') format('woff2'),
+       url('fonts/chunk_five_print-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'courier_primeregular';
+  src: url('fonts/courier_prime-webfont.woff2') format('woff2'),
+       url('fonts/courier_prime-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+:root {
+  --header-font: 'chunkfive_printregular';
+  --main-font: 'courier_primeregular';
+  --bg-color: #e2e2e2;
+}
+
+body {
+  box-sizing: content-box;
+  font-family: var(--main-font);
+  background-color: var(--bg-color);
+}
+
+.main-header {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: gray 2px 2px 5px;
+  padding: 2em;
+  gap: 0.8em;
+
+  & h2, & p {
+    font-family: var(--header-font);
+    margin: 0;
+  }
+
+  & h2 {
+    font-size: clamp(1rem, 1vw + 2rem, 3rem);
+  }
+}
+
+@media (min-width: 720px) {
+  .main-header {
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
