@@ -28,6 +28,7 @@ body {
   box-sizing: content-box;
   font-family: var(--main-font);
   background-color: var(--bg-color);
+  height: 100vh;
 }
 
 .main-header {

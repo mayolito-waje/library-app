@@ -71,3 +71,18 @@ Library.prototype.toggleRead = function(id) {
     }
   }
 }
+
+// ---------------------DOM ELEMENTS---------------------
+const addBookDialog = document.querySelector(".add-book-form-dialog");
+const addBookBtn = document.querySelector("button.add-book");
+const closeBookDialog = document.querySelector(".add-book-form-dialog .close-dialog");
+
+window.addEventListener('DOMContentLoaded', () => {
+  addBookBtn.addEventListener('click', () => {
+    addBookDialog.showModal();
+  });
+
+  closeBookDialog.addEventListener('click', () => {
+    addBookDialog.close();
+  })
+})
