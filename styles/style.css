@@ -57,7 +57,8 @@ body {
   place-content: center;
 }
 
-button.add-book {
+button.add-book, 
+.add-book-form .confirm-add-book-btn button {
   background: none;
   border: none;
   cursor: pointer;
@@ -68,7 +69,8 @@ button.add-book {
   gap: 0.5em;
 }
 
-button.add-book::before {
+button.add-book::before,
+.add-book-form .confirm-add-book-btn button::before {
   content: '';
   display: inline-block;
   height: clamp(1.2rem, 1vw + 0.8rem, 2rem);
@@ -79,11 +81,14 @@ button.add-book::before {
   bottom: 2px;
 }
 
-button.add-book:hover::before {
+button.add-book:hover::before,
+.add-book-form .confirm-add-book-btn button:hover::before {
   background: url(icons/plus-box.svg) no-repeat center;
 }
 
-button.add-book::after {
+button.add-book::after,
+.add-book-form .confirm-add-book-btn button::after,
+.add-book-form .text-input::after {
   content: '';
   position: absolute;
   left: 0;
@@ -96,9 +101,79 @@ button.add-book::after {
   transition: transform 0.25s ease-out;
 }
 
-button.add-book:hover::after {
+button.add-book:hover::after,
+.add-book-form .confirm-add-book-btn button:hover::after,
+.add-book-form .text-input:focus-within::after {
   transform: scaleX(1);
   transform-origin: bottom left;
+}
+
+.add-book-form-dialog {
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.25s ease-out;
+  border-radius: 15px;
+  position: relative;
+  padding: 2.5em;
+  overflow: hidden;
+}
+
+.add-book-form-dialog.scale-up {
+  transform: scaleY(1);
+}
+
+.close-dialog {
+  cursor: pointer;
+  color: transparent;
+  height: 1.5em;
+  width: 1.5em;
+  border: none;
+  background-color: none;
+  background: url(icons/close-box-outline.svg) center no-repeat;
+  background-size: contain;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.close-dialog:hover {
+  background: url(icons/close-box.svg) center no-repeat;
+}
+
+.add-book-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  justify-content: center;
+  align-items: center;
+
+  & .title,
+  & .author,
+  & .pages,
+  & .is-read {
+    width: 100%;
+  }
+
+  & .title,
+  & .author,
+  & .pages {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.add-book-form input {
+  border: none;
+  outline: none;
+}
+
+.add-book-form .text-input {
+  position: relative;
+}
+
+.add-book-form .checkbox-input {
+  display: inline;
 }
 
 @media (min-width: 720px) {

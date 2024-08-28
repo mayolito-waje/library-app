@@ -80,9 +80,21 @@ const closeBookDialog = document.querySelector(".add-book-form-dialog .close-dia
 window.addEventListener('DOMContentLoaded', () => {
   addBookBtn.addEventListener('click', () => {
     addBookDialog.showModal();
+
+    requestAnimationFrame(() => {
+      addBookDialog.classList.add('scale-up');
+    });
   });
 
-  closeBookDialog.addEventListener('click', () => {
-    addBookDialog.close();
+  closeBookDialog.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    requestAnimationFrame(() => {
+      addBookDialog.classList.remove('scale-up');
+    });
+
+    setTimeout(() => {
+      addBookDialog.close();
+    }, 0.25 * 1000);
   })
 })
