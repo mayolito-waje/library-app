@@ -21,8 +21,8 @@ function Library() {
   this.library = [];
 }
 
-Library.prototype.addBook = function({title, author, pages, isRead}) {
-  const newBook = new Book(this.currId, title, author, pages, isRead ?? false);
+Library.prototype.addBook = function({id, title, author, pages, isRead}) {
+  const newBook = new Book(id ?? this.currId, title, author, pages, isRead ?? false);
   this.currId++;
 
   this.library.push(newBook);
@@ -36,7 +36,8 @@ Library.prototype.addBook = function({title, author, pages, isRead}) {
 }
 
 Library.prototype.deleteBook = function(id) {
-  if (!id) {
+  console.log(id);
+  if (!(String(id).match(/^[0-9]+$/))) {
     throw new Error('please provide Book ID');
   }
 
@@ -51,7 +52,7 @@ Library.prototype.deleteBook = function(id) {
 }
 
 Library.prototype.updateBook = function({id, title, author, pages}) {
-  if (!id) {
+  if (!(String(id).match(/^[0-9]+$/))) {
     throw new Error('please provide Book ID');
   }
 
@@ -65,7 +66,7 @@ Library.prototype.updateBook = function({id, title, author, pages}) {
 }
 
 Library.prototype.toggleRead = function(id) {
-  if (!id) {
+  if (!(String(id).match(/^[0-9]+$/))) {
     throw new Error('please provide Book ID');
   }
 
@@ -79,7 +80,7 @@ Library.prototype.toggleRead = function(id) {
 }
 
 Library.prototype.showEntry = function(id) {
-  if (!id) {
+  if (!(String(id).match(/^[0-9]+$/))) {
     throw new Error('please provide Book ID');
   }
 
@@ -114,85 +115,103 @@ const sanitizeInput = (str) => {
   return String(str).replace(/[&<>"'`=\/]/g, (s) => entityMap[s]);
 }
 
-const createBookEntry = function ({id, title, author, pages, isRead}) {
-  /* 
-  <li class="book-card">
-    <div class="title">"{title}"</div>
-    <div class="author">{author}</div>
-    <div class="pages">{pages} pages</div>
-    <div class="book-entry_is-read">
-      <label for="id-{id}_is-read">Read:</label>
-      <input 
-        type="checkbox" 
-        name="book-list_is-read" 
-        id="id-{id}_is-read" 
-        value="id-{id}_is-read" 
-        class="is-read_checkbox"
-        data-bookId="{id}"
-      >
-    </div>
-    <button class="update_btn" data-book-id="{id}">Update</button>
-    <button class="delete_btn" data-book-id="{id}">Delete</button>
-  </li>
-  */
-
-  const bookCard = document.createElement('li');
-  bookCard.classList.add('book-card');
-  bookCard.dataset.bookId = id;
-
-  const titleEntry = document.createElement('div');
-  titleEntry.classList.add('title');
-  titleEntry.textContent = `"${title}"`;
-  bookCard.appendChild(titleEntry);
-
-  const authorEntry = document.createElement('div');
-  authorEntry.classList.add('author');
-  authorEntry.textContent = author;
-  bookCard.appendChild(authorEntry);
-
-  const pagesEntry = document.createElement('div');
-  pagesEntry.classList.add('pages');
-  pagesEntry.textContent = `${pages} pages`;
-  bookCard.appendChild(pagesEntry);
-
-  const isReadEntry = document.createElement('div');
-  isReadEntry.classList.add('book-entry_is-read');
-  const isReadCheckBoxLabel = document.createElement('label');
-  isReadCheckBoxLabel.htmlFor = `id-${id}_is-read`;
-  isReadCheckBoxLabel.textContent = 'Read:';
-  isReadEntry.appendChild(isReadCheckBoxLabel);
-  const isReadCheckBox = document.createElement('input');
-  isReadCheckBox.type = 'checkbox';
-  isReadCheckBox.name = 'book-list_is-read';
-  isReadCheckBox.id = `id-${id}_is-read`;
-  isReadCheckBox.value = `id-${id}_is-read`;
-  isReadCheckBox.classList.add('is-read_checkbox');
-  isReadCheckBox.checked = isRead;
-  isReadCheckBox.dataset.bookId = id
-  isReadEntry.appendChild(isReadCheckBox);
-  bookCard.appendChild(isReadEntry);
-
-  const updateBtn = document.createElement('button');
-  updateBtn.textContent = 'Update';
-  updateBtn.dataset.bookId = id;
-  bookCard.appendChild(updateBtn);
-
-  const deleteBtn = document.createElement('button');
-  deleteBtn.textContent = 'Delete';
-  deleteBtn.dataset.bookId = id;
-  bookCard.appendChild(deleteBtn);
-
-  return bookCard;
-};
-
 window.addEventListener('DOMContentLoaded', () => {
   const library = new Library();
+
+  const updateLibrary = function () {
+    window.localStorage.setItem('book_list', JSON.stringify(library.library));
+  };
+
+  const createBookEntry = function ({id, title, author, pages, isRead}) {
+    /* 
+    <li class="book-card" data-book-id="{id}">
+      <div class="title">"{title}"</div>
+      <div class="author">{author}</div>
+      <div class="pages">{pages} pages</div>
+      <div class="book-entry_is-read">
+        <label for="id-{id}_is-read">Read:</label>
+        <input 
+          type="checkbox" 
+          name="book-list_is-read" 
+          id="id-{id}_is-read" 
+          value="id-{id}_is-read" 
+          class="is-read_checkbox"
+          data-bookId="{id}"
+        >
+      </div>
+      <button class="update_btn" data-book-id="{id}">Update</button>
+      <button class="delete_btn" data-book-id="{id}">Delete</button>
+    </li>
+    */
+  
+    const bookCard = document.createElement('li');
+    bookCard.classList.add('book-card');
+    bookCard.dataset.bookId = id;
+  
+    const titleEntry = document.createElement('div');
+    titleEntry.classList.add('title');
+    titleEntry.textContent = `"${title}"`;
+    bookCard.appendChild(titleEntry);
+  
+    const authorEntry = document.createElement('div');
+    authorEntry.classList.add('author');
+    authorEntry.textContent = author;
+    bookCard.appendChild(authorEntry);
+  
+    const pagesEntry = document.createElement('div');
+    pagesEntry.classList.add('pages');
+    pagesEntry.textContent = `${pages} pages`;
+    bookCard.appendChild(pagesEntry);
+  
+    const isReadEntry = document.createElement('div');
+    isReadEntry.classList.add('book-entry_is-read');
+    const isReadCheckBoxLabel = document.createElement('label');
+    isReadCheckBoxLabel.htmlFor = `id-${id}_is-read`;
+    isReadCheckBoxLabel.textContent = 'Read:';
+    isReadEntry.appendChild(isReadCheckBoxLabel);
+    const isReadCheckBox = document.createElement('input');
+    isReadCheckBox.type = 'checkbox';
+    isReadCheckBox.name = 'book-list_is-read';
+    isReadCheckBox.id = `id-${id}_is-read`;
+    isReadCheckBox.value = `id-${id}_is-read`;
+    isReadCheckBox.classList.add('is-read_checkbox');
+    isReadCheckBox.checked = isRead;
+    isReadCheckBox.dataset.bookId = id
+    isReadEntry.appendChild(isReadCheckBox);
+    bookCard.appendChild(isReadEntry);
+  
+    const updateBtn = document.createElement('button');
+    updateBtn.textContent = 'Update';
+    updateBtn.dataset.bookId = id;
+    bookCard.appendChild(updateBtn);
+  
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.dataset.bookId = id;
+    bookCard.appendChild(deleteBtn);
+
+    isReadCheckBox.addEventListener('click', (e) => {
+      library.toggleRead(parseInt(e.currentTarget.dataset.bookId));
+      updateLibrary();
+    });
+
+    deleteBtn.addEventListener('click', (e) => {
+      library.deleteBook(parseInt(e.currentTarget.dataset.bookId));
+      document.querySelector(`ol.book-list_data .book-card[data-book-id="${e.currentTarget.dataset.bookId}"]`)
+        .remove();
+      updateLibrary();
+    });
+  
+    return bookCard;
+  };
+
   if (window.localStorage.getItem('library_curr_id') && window.localStorage.getItem('book_list')) {
     library.currId = parseInt(window.localStorage.getItem('library_curr_id'));
     const bookList = JSON.parse(window.localStorage.getItem('book_list'));
 
     bookList.forEach((entry) => {
       const {id, title, author, pages, isRead} = entry;
+      library.addBook({id, title, author, pages, isRead});
       const bookCard = createBookEntry({id, title, author, pages, isRead});
       document.querySelector('ol.book-list_data').appendChild(bookCard);
     });
@@ -232,10 +251,9 @@ window.addEventListener('DOMContentLoaded', () => {
       pages,
       isRead
     });
-    console.log(`New entry added: ${JSON.stringify(entry)}`);
-    window.localStorage.setItem('book_list', JSON.stringify(library.library));
+
+    updateLibrary();
     window.localStorage.setItem('library_curr_id', library.currId);
-    console.log(library.library);
 
     const bookCard = createBookEntry(entry, library);
     document.querySelector('ol.book-list_data').appendChild(bookCard);
