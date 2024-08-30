@@ -106,13 +106,12 @@ const sanitizeInput = (str) => {
     '<': '&lt;',
     '>': '&gt;',
     '"': '&quot;',
-    "'": '&#39;',
     '/': '&#x2F;',
     '`': '&#x60;',
     '=': '&#x3D;'
   };
 
-  return String(str).replace(/[&<>"'`=\/]/g, (s) => entityMap[s]);
+  return String(str).replace(/[&<>"`=\/]/g, (s) => entityMap[s]);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -181,11 +180,13 @@ window.addEventListener('DOMContentLoaded', () => {
     bookCard.appendChild(isReadEntry);
   
     const updateBtn = document.createElement('button');
+    updateBtn.classList.add('update_btn');
     updateBtn.textContent = 'Update';
     updateBtn.dataset.bookId = id;
     bookCard.appendChild(updateBtn);
   
     const deleteBtn = document.createElement('button');
+    deleteBtn.classList.add('delete_btn');
     deleteBtn.textContent = 'Delete';
     deleteBtn.dataset.bookId = id;
     bookCard.appendChild(deleteBtn);
@@ -219,6 +220,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   addBookBtn.addEventListener('click', () => {
     addBookDialog.showModal();
+    addBookForm.reset();
 
     requestAnimationFrame(() => {
       addBookDialog.classList.add('scale-up');

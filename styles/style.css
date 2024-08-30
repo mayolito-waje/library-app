@@ -222,6 +222,75 @@ input[type="checkbox"].is-read_checkbox:checked:after{
   margin: 2em;
 }
 
+.book-list_data {
+  display: grid;
+  list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax(20em, 1fr));
+  gap: 1.5em;
+  padding: 0;
+}
+
+.book-list_data .book-card {
+  background-color: white;
+  padding: 1.5em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px #242424;
+}
+
+.book-list_data .book-card .title {
+  font-weight: bold;
+}
+
+.book-list_data .book-card > button {
+  padding: 0.3em;
+  width: 80%;
+  cursor: pointer;
+  border: none;
+  border-radius: 0.5em;
+  font-family: var(--header-font);
+  color: white;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  transition: filter 0.25s ease-out;
+}
+.book-list_data .book-card > button:hover {
+  filter: brightness(85%);
+}
+.book-list_data .book-card > button::before {
+  content: '';
+  width: 1.5em;
+  height: 1.5em;
+  background-size: contain;
+  display: inline-block;
+}
+
+.book-list_data .book-card button.update_btn {
+  background-color: #0ebeff;
+}
+.book-list_data .book-card button.update_btn::before {
+  background: url(icons/book-edit.svg) center no-repeat;
+}
+
+.book-list_data .book-card button.delete_btn {
+  background-color: #ff6262;
+}
+.book-list_data .book-card button.delete_btn::before {
+  background: url(icons/delete.svg) center no-repeat;
+}
+
+.book-list_data .book-card .book-entry_is-read {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+}
+
 @media (min-width: 720px) {
   .main-header {
     flex-flow: row;
