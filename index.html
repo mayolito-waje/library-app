@@ -23,29 +23,33 @@
       <div class="title">
         <label for="title">Title:</label>
         <div class="text-input">
-          <input type="text" name="title" id="title">
+          <input type="text" name="title" id="title" required>
         </div>
       </div>
       <div class="author">
         <label for="author">Author:</label>
         <div class="text-input">
-          <input type="text" name="author" id="author">
+          <input type="text" name="author" id="author" required>
         </div>
       </div>
       <div class="pages">
         <label for="pages">Pages:</label>
         <div class="text-input">
-          <input type="number" name="pages" id="pages" class="text-input">
+          <input type="number" name="pages" id="pages" class="text-input" required>
         </div>
       </div>
       <div class="is-read">
         <label for="is-read">Finished Reading:</label>
-        <input type="checkbox" name="is-read" id="is-read" class="is-read_checkbox">
+        <input type="checkbox" name="is-read" id="is-read" value="is-read" class="is-read_checkbox">
       </div>
       <div class="confirm-add-book-btn">
         <button type="submit">Add Book</button>
       </div>
     </form>
   </dialog>
+  <div class="book-list">
+    <h2>Book List</h2>
+    <ol class="book-list_data"></ol>
+  </div>
 </body>
 </html>

@@ -194,11 +194,11 @@ input[type="checkbox"].is-read_checkbox{
   transition: all .2s ease-in-out;
   }
   
-  input[type="checkbox"].is-read_checkbox:checked{
+input[type="checkbox"].is-read_checkbox:checked{
   background: #0ebeff;
-  }
-  
-  input[type="checkbox"].is-read_checkbox:after{
+}
+
+input[type="checkbox"].is-read_checkbox:after{
   position: absolute;
   content: "";
   width: 1.5em;
@@ -212,16 +212,25 @@ input[type="checkbox"].is-read_checkbox{
   left: 0;
   -webkit-transition: all .2s ease-in-out;
   transition: all .2s ease-in-out;
-  }
-  
-  input[type="checkbox"].is-read_checkbox:checked:after{
+}
+
+input[type="checkbox"].is-read_checkbox:checked:after{
   left: calc(100% - 1.5em);
-  }
+}
+
+.book-list {
+  margin: 2em;
+}
 
 @media (min-width: 720px) {
   .main-header {
     flex-flow: row;
     justify-content: space-between;
     align-items: center;
+    padding: 2em 6em;
+  }
+
+  .book-list {
+    margin: 2em 6em;
   }
 }
