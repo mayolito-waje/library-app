@@ -209,6 +209,8 @@ window.addEventListener('DOMContentLoaded', () => {
       document.querySelector('.update-book-form input#update_author').value = bookToUpdate.author;
       document.querySelector('.update-book-form input#update_pages').value = bookToUpdate.pages;
       document.querySelector('.update-book-form input#update_is-read').checked = bookToUpdate.isRead;
+
+      window.scrollTo(0, 0);
       
       updateBookDialog.showModal();
 
