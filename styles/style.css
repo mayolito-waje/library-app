@@ -58,7 +58,8 @@ body {
 }
 
 button.add-book, 
-.add-book-form .confirm-add-book-btn button {
+.add-book-form .confirm-add-book-btn button,
+.update-book-form .confirm-update-book-btn button {
   background: none;
   border: none;
   cursor: pointer;
@@ -70,7 +71,8 @@ button.add-book,
 }
 
 button.add-book::before,
-.add-book-form .confirm-add-book-btn button::before {
+.add-book-form .confirm-add-book-btn button::before,
+.update-book-form .confirm-update-book-btn button::before {
   content: '';
   display: inline-block;
   height: clamp(1.2rem, 1vw + 0.8rem, 2rem);
@@ -82,13 +84,16 @@ button.add-book::before,
 }
 
 button.add-book:hover::before,
-.add-book-form .confirm-add-book-btn button:hover::before {
+.add-book-form .confirm-add-book-btn button:hover::before,
+.update-book-form .confirm-update-book-btn button:hover::before {
   background: url(icons/plus-box.svg) no-repeat center;
 }
 
 button.add-book::after,
 .add-book-form .confirm-add-book-btn button::after,
-.add-book-form .text-input::after {
+.add-book-form .text-input::after,
+.update-book-form .confirm-update-book-btn button::after,
+.update-book-form .text-input::after {
   content: '';
   position: absolute;
   left: 0;
@@ -103,12 +108,14 @@ button.add-book::after,
 
 button.add-book:hover::after,
 .add-book-form .confirm-add-book-btn button:hover::after,
-.add-book-form .text-input:focus-within::after {
+.add-book-form .text-input:focus-within::after,
+.update-book-form .confirm-update-book-btn button:hover::after,
+.update-book-form .text-input:focus-within::after {
   transform: scaleX(1);
   transform-origin: bottom left;
 }
 
-.add-book-form-dialog {
+.add-book-form-dialog, .update-book-form-dialog {
   transform: scaleY(0);
   transform-origin: bottom;
   transition: transform 0.25s ease-out;
@@ -118,7 +125,7 @@ button.add-book:hover::after,
   overflow: hidden;
 }
 
-.add-book-form-dialog.scale-up {
+.add-book-form-dialog.scale-up, .update-book-form-dialog.scale-up {
   transform: scaleY(1);
 }
 
@@ -140,7 +147,7 @@ button.add-book:hover::after,
   background: url(icons/close-box.svg) center no-repeat;
 }
 
-.add-book-form {
+.add-book-form, .update-book-form {
   display: flex;
   flex-direction: column;
   gap: 1.5em;
@@ -169,12 +176,12 @@ button.add-book:hover::after,
   }
 }
 
-.add-book-form input {
+.add-book-form input, .update-book-form input {
   border: none;
   outline: none;
 }
 
-.add-book-form .text-input {
+.add-book-form .text-input, .update-book-form .text-input {
   position: relative;
 }
 

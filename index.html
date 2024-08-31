@@ -17,6 +17,8 @@
       Add Book
     </button>
   </div>
+
+  <!-- add book form -->
   <dialog class="add-book-form-dialog">
     <form class="add-book-form">
       <button class="close-dialog">close</button>
@@ -47,6 +49,45 @@
       </div>
     </form>
   </dialog>
+
+  <!-- update book form -->
+  <dialog class="update-book-form-dialog">
+    <form class="update-book-form">
+      <button class="close-dialog">close</button>
+      <div class="title">
+        <label for="update_title">Title:</label>
+        <div class="text-input">
+          <input type="text" name="title" id="update_title" required>
+        </div>
+      </div>
+      <div class="author">
+        <label for="update_author">Author:</label>
+        <div class="text-input">
+          <input type="text" name="author" id="update_author" required>
+        </div>
+      </div>
+      <div class="pages">
+        <label for="update_pages">Pages:</label>
+        <div class="text-input">
+          <input type="number" name="pages" id="update_pages" class="text-input" required>
+        </div>
+      </div>
+      <div class="is-read">
+        <label for="update_is-read">Finished Reading:</label>
+        <input
+          type="checkbox"
+          name="is-read"
+          id="update_is-read"
+          value="is-read"
+          class="is-read_checkbox"
+        >
+      </div>
+      <div class="confirm-update-book-btn">
+        <button type="submit">Update Book</button>
+      </div>
+    </form>
+  </dialog>
+
   <div class="book-list">
     <h2>Book List</h2>
     <ol class="book-list_data"></ol>

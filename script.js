@@ -10,10 +10,13 @@ Book.prototype.toggleRead = function() {
   this.isRead = !this.isRead;
 }
 
-Book.prototype.update = function({title, author, pages}) {
+Book.prototype.update = function({title, author, pages, isRead}) {
   if (title) this.title = title;
   if (author) this.author = author;
   if (pages) this.pages = pages;
+  this.isRead = isRead ? true : false;
+
+  return this;
 }
 
 function Library() {
@@ -23,7 +26,7 @@ function Library() {
 
 Library.prototype.addBook = function({id, title, author, pages, isRead}) {
   const newBook = new Book(id ?? this.currId, title, author, pages, isRead ?? false);
-  this.currId++;
+  if (!id) this.currId++;
 
   this.library.push(newBook);
   return {
@@ -36,7 +39,6 @@ Library.prototype.addBook = function({id, title, author, pages, isRead}) {
 }
 
 Library.prototype.deleteBook = function(id) {
-  console.log(id);
   if (!(String(id).match(/^[0-9]+$/))) {
     throw new Error('please provide Book ID');
   }
@@ -51,7 +53,7 @@ Library.prototype.deleteBook = function(id) {
   }
 }
 
-Library.prototype.updateBook = function({id, title, author, pages}) {
+Library.prototype.updateBook = function({id, title, author, pages, isRead}) {
   if (!(String(id).match(/^[0-9]+$/))) {
     throw new Error('please provide Book ID');
   }
@@ -60,7 +62,7 @@ Library.prototype.updateBook = function({id, title, author, pages}) {
     const book = this.library[i];
 
     if (book.id === id) {
-      book.update({title, author, pages});
+      return book.update({title, author, pages, isRead});
     }
   }
 }
@@ -88,7 +90,7 @@ Library.prototype.showEntry = function(id) {
     const book = this.library[i];
 
     if (book.id === id) {
-      return JSON.stringify(book);
+      return book;
     }
   }
 
@@ -99,6 +101,9 @@ const addBookDialog = document.querySelector(".add-book-form-dialog");
 const addBookBtn = document.querySelector("button.add-book");
 const closeBookDialog = document.querySelector(".add-book-form-dialog .close-dialog");
 const addBookForm = document.querySelector("form.add-book-form");
+const updateBookDialog = document.querySelector('.update-book-form-dialog');
+const closeUpdateBookDialog = document.querySelector('.update-book-form-dialog .close-dialog');
+const updateBookForm = document.querySelector("form.update-book-form");
 
 const sanitizeInput = (str) => {
   const entityMap = {
@@ -196,6 +201,22 @@ window.addEventListener('DOMContentLoaded', () => {
       updateLibrary();
     });
 
+    updateBtn.addEventListener('click', (e) => {
+      const bookToUpdate = library.showEntry(parseInt(e.currentTarget.dataset.bookId));
+
+      document.querySelector('.update-book-form').dataset.updateBookId = bookToUpdate.id;
+      document.querySelector('.update-book-form input#update_title').value = bookToUpdate.title;
+      document.querySelector('.update-book-form input#update_author').value = bookToUpdate.author;
+      document.querySelector('.update-book-form input#update_pages').value = bookToUpdate.pages;
+      document.querySelector('.update-book-form input#update_is-read').checked = bookToUpdate.isRead;
+      
+      updateBookDialog.showModal();
+
+      requestAnimationFrame(() => {
+        updateBookDialog.classList.add('scale-up');
+      });
+    })
+
     deleteBtn.addEventListener('click', (e) => {
       library.deleteBook(parseInt(e.currentTarget.dataset.bookId));
       document.querySelector(`ol.book-list_data .book-card[data-book-id="${e.currentTarget.dataset.bookId}"]`)
@@ -206,16 +227,20 @@ window.addEventListener('DOMContentLoaded', () => {
     return bookCard;
   };
 
-  if (window.localStorage.getItem('library_curr_id') && window.localStorage.getItem('book_list')) {
+  if (window.localStorage.getItem('book_list')) {
     library.currId = parseInt(window.localStorage.getItem('library_curr_id'));
     const bookList = JSON.parse(window.localStorage.getItem('book_list'));
 
+    let maxId = -Infinity;
     bookList.forEach((entry) => {
       const {id, title, author, pages, isRead} = entry;
       library.addBook({id, title, author, pages, isRead});
       const bookCard = createBookEntry({id, title, author, pages, isRead});
       document.querySelector('ol.book-list_data').appendChild(bookCard);
+      if (id > maxId) maxId = id;
     });
+
+    library.currId = maxId + 1;
   }
 
   addBookBtn.addEventListener('click', () => {
@@ -255,11 +280,56 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     updateLibrary();
-    window.localStorage.setItem('library_curr_id', library.currId);
 
     const bookCard = createBookEntry(entry, library);
     document.querySelector('ol.book-list_data').appendChild(bookCard);
 
-    addBookDialog.close();
+    requestAnimationFrame(() => {
+      addBookDialog.classList.remove('scale-up');
+    });
+
+    setTimeout(() => {
+      addBookDialog.close();
+    }, 0.25 * 1000);
+  });
+
+  closeUpdateBookDialog.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    requestAnimationFrame(() => {
+      updateBookDialog.classList.remove('scale-up');
+    });
+
+    setTimeout(() => {
+      updateBookDialog.close();
+    }, 0.25 * 1000);
+  });
+
+  updateBookForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const bookId = document.querySelector('.update-book-form').dataset.updateBookId;
+    const title = document.querySelector('.update-book-form input#update_title').value;
+    const author = document.querySelector('.update-book-form input#update_author').value;
+    const pages = document.querySelector('.update-book-form input#update_pages').value;
+    const isRead = document.querySelector('.update-book-form input#update_is-read').checked;
+
+    const updatedBook = library.updateBook({id: parseInt(bookId), title, author, pages, isRead});
+
+    const bookCardQuery = `.book-list_data .book-card[data-book-id="${updatedBook.id}"]`;
+    document.querySelector(`${bookCardQuery} .title`).textContent = `"${updatedBook.title}"`;
+    document.querySelector(`${bookCardQuery} .author`).textContent = updatedBook.author;
+    document.querySelector(`${bookCardQuery} .pages`).textContent = `${pages} pages`;
+    document.querySelector(`${bookCardQuery} .is-read_checkbox`).checked = updatedBook.isRead;
+
+    updateLibrary();
+
+    requestAnimationFrame(() => {
+      updateBookDialog.classList.remove('scale-up');
+    });
+
+    setTimeout(() => {
+      updateBookDialog.close();
+    }, 0.25 * 1000);
   });
 })
