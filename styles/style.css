@@ -232,7 +232,7 @@ input[type="checkbox"].is-read_checkbox:checked:after{
 .book-list_data {
   display: grid;
   list-style: none;
-  grid-template-columns: repeat(auto-fit, minmax(20em, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
   gap: 1.5em;
   padding: 0;
 }
